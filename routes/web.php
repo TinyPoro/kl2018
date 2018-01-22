@@ -12,5 +12,21 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('main');
+})->middleware('auth')->name('home');
+
+Route::get('/logout', function () {
+    Auth::logout();
+    return view('auth.login');
+})->name('_logout');
+
+Route::post('/_login', 'LoginController@authenticate')->name('_login');
+
+Auth::routes();
+
+//Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/approve', 'SuperAdminController@approve')->name('approve');
+
+Route::post('/accept/{id}', 'SuperAdminController@accept')->name('accept');
+Route::post('/deny/{id}', 'SuperAdminController@deny')->name('deny');
