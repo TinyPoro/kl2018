@@ -8,13 +8,17 @@
     <div class="container">
         <h2>Nhập từ khóa vào ô tìm kiếm:</h2>
         <hr>
-        <form>
+        <form onSubmit="return formstop();">
             <div id="keyword" class="form-group">
                 <label for="keyword">Từ khóa:</label>
                 <input type="text" class="form-control" id="keyword" placeholder="Nhập từ khóa bạn quan tâm">
             </div>
-            <button class="btn btn-primary">Submit</button>
+            <button id="submit" class="btn btn-primary">Tìm kiếm</button>
         </form>
+
+        <div id='list_url' style="width: 500px; max-height: 300px; overflow: auto"></div>
+        <div id='chart'></div>
+        <button id="next" class="btn btn-primary" style="display: none">Next</button>
     </div>
     <style>
 
@@ -23,6 +27,10 @@
 
 @section('after-script')
     <script>
+        function formstop() {
+            return false;
+        }
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -35,13 +43,51 @@
 
             $.ajax({
                 method: 'POST',
-                url: "findkeyword",
-                data: '{keyword:' + keyword + '}',
+                url: "find_keyword",
+                data: {keyword:keyword},
                 success: function(result){
-                    alert(result);
-                    // $('tr#'+result).remove();
+                    // $('form').after("<div id='list_url'></div>");
+                    $('input').prop('disabled', true);
+                    $('#submit').remove();
+
+                    data = "<ul class=\"list-group\">";
+
+                    result.forEach(function(article){
+                        data += "<li class=\"list-group-item\"><a href=\"{{route('articles_info')}}/" + article['id'] + "\">" + article['url'] + "</a></li>";
+                    });
+
+                    data += "</ul>";
+
+                    $('#list_url').html(data);
+
+
+                    $('#next').show();
+
+                    // $('form').after("<div id='chart'></div>");
                 }
             });
+        });
+
+        $('#next').click(function(){
+            var chart = new CanvasJS.Chart("chart", {
+                title:{
+                    text: "My First Chart in CanvasJS"
+                },
+                data: [
+                    {
+                        // Change type to "doughnut", "line", "splineArea", etc.
+                        type: "doughnut",
+                        dataPoints: [
+                            { label: "apple",  y: 10  },
+                            { label: "orange", y: 15  },
+                            { label: "banana", y: 25  },
+                            { label: "mango",  y: 30  },
+                            { label: "grape",  y: 28  }
+                        ]
+                    }
+                ]
+            });
+            chart.render();
         });
     </script>
 @endsection

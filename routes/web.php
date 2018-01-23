@@ -27,12 +27,16 @@ Auth::routes();
 //Route::get('/home', 'HomeController@index')->name('home');
 
 //xác thực người dùng
-Route::get('/approve', 'SuperAdminController@approve')->name('approve');
+Route::get('/approve', 'SuperAdminController@approve')->middleware('auth')->name('approve');
 
 Route::post('/accept/{id}', 'SuperAdminController@accept')->name('accept');
 Route::post('/deny/{id}', 'SuperAdminController@deny')->name('deny');
 
 //tìm kiếm từ khóa
-Route::get('/keyword', 'UserController@keyword')->name('keyword');
+Route::get('/keyword', 'UserController@keyword')->middleware('auth')->name('keyword');
 
-Route::post('/findkeyword', 'UserController@findkeyword')->name('findkeyword');
+Route::post('/find_keyword', 'UserController@findkeyword')->name('findkeyword');
+
+Route::get('/article_info', 'UserController@info')->middleware('auth')->name('articles_info');
+
+Route::get('/article_info/{id}', 'UserController@info')->middleware('auth')->name('article_info');
