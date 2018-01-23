@@ -14,6 +14,17 @@ class SuperAdminController extends Controller
     }
 
     public function accept($id) {
-        return "a";
+        $user = User::find($id);
+        $user->type = User::USER_TYPE;
+        $user->save();
+
+        return $id;
+    }
+
+    public function deny($id) {
+        $user = User::find($id);
+        $user->delete();
+
+        return $id;
     }
 }

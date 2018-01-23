@@ -7,6 +7,7 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="robots" content="all,follow">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Bootstrap CSS-->
     <link rel="stylesheet" href="{{url('css/bootstrap.min.css')}}">
     <!-- Font Awesome CSS-->
@@ -93,7 +94,9 @@
             </div>
             <span class="heading">Main</span>
             <ul class="list-unstyled">
-                <li class="active"><a href="{{url(route('home'))}}"> <i class="fa fa-home"></i>Home </a></li>
+                <li class="active"><a href="{{url(route('home'))}}"> <i class="fa fa-home"></i>Trang chủ </a></li>
+                <li class="active"><a href="{{url(route('keyword'))}}"> <i class="fa fa-key"></i>Từ khóa </a></li>
+
                 <?php
                  $user = Auth::user();
                  if($user->type == \App\User::SUPER_ADMIN_TYPE) echo "<li class='active'><a href='".route('approve')."'> <i class='fa fa-user-plus'></i>Xác thực người dùng</a></li>";
