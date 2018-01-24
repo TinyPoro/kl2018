@@ -6,17 +6,44 @@
 
 @section('content')
     <div class="container">
-        <h2>Nhập từ khóa vào ô tìm kiếm:</h2>
+        <h2>Thông tin chi tiết:</h2>
         <hr>
-        <form onSubmit="return formstop();">
-            <div id="keyword" class="form-group">
-                <label for="keyword">Từ khóa:</label>
-                <input type="text" class="form-control" id="keyword" placeholder="Nhập từ khóa bạn quan tâm">
-            </div>
-            <button class="btn btn-primary">Submit</button>
-        </form>
+        <div class="form-group">
+            <label><strong>Trang báo: </strong></label>
+            <span>{{$article->host}}</span>
+        </div>
+        <div class="form-group">
+            <label><strong>Đường dẫn: </strong></label>
+            <span>{{$article->url}}</span>
+        </div>
+        <div class="form-group">
+            <label><strong>Tiêu đề: </strong></label>
+            <span>{{$article->title}}</span>
+        </div>
+        <div class="form-group">
+            <label><strong>Nội dung: </strong></label>
+            <span>{{$article->content}}</span>
+        </div>
+        <div class="form-group">
+            <label><strong>Ngày đăng:  </strong></label>
+            <div>{{$article->date}}</div>
+        </div>
+        <div class="form-group">
+            <label><strong>Phân loại: </strong></label>
+            <span>{{$article->getTypeTextAttribute()}}</span>
+        </div>
 
-        <div id='list_url' style="width: 500px; max-height: 300px; overflow: auto"></div>
+        <br/>
+        <br/>
+
+        <h2>Các bình luận:</h2>
+        <hr>
+        @foreach($comments as $comment)
+            <div class="form-group">
+                <label><strong>{{$comment->user_name}}:  </strong></label>
+                <div>{{$comment->content}}</div>
+            </div>
+        @endforeach
     </div>
     <style>
 

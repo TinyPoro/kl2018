@@ -96,6 +96,7 @@
             <ul class="list-unstyled">
                 <li class="active"><a href="{{url(route('home'))}}"> <i class="fa fa-home"></i>Trang chủ </a></li>
                 <li class="active"><a href="{{url(route('keyword'))}}"> <i class="fa fa-key"></i>Từ khóa </a></li>
+                <li class="active"><a href="{{url(route('info'))}}"> <i class="fa fa-key"></i>Thông tin cá nhân </a></li>
 
                 <?php
                  $user = Auth::user();

@@ -11,6 +11,13 @@ class Article extends Model
     const POSITIVE_TYPE = 1;
     const UNRELATIVE_TYPE = 2;
 
+    protected $type_array = [
+        -1 => "Tiêu cực",
+        0 => "Không liên quan",
+        1 => "Tích cực",
+        2 => "Chưa phân loại",
+    ];
+
     public function keywords(){
         return $this->belongsToMany('App\Keyword');
     }
@@ -21,5 +28,9 @@ class Article extends Model
 
     public function comments(){
         return $this->hasMany('App\Comment');
+    }
+
+    public function getTypeTextAttribute(){
+        return array_get($this->type_array, $this->type, 'Chưa phân loại');
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Article;
+use App\Comment;
 use function foo\func;
 use Illuminate\Http\Request;
 
@@ -23,9 +24,100 @@ class UserController extends Controller
         return $articles;
     }
 
-    public function info($id){
+    public function article_info($id){
         $article = Article::find($id);
 
-        return view('User.articleinfo', ['article'=>$article]);
+        $comments = $article->comments;
+
+        return view('User.articleinfo', ['article'=>$article, 'comments'=>$comments]);
+    }
+
+    public function chart(Request $request){
+        $keyword = $request->get('keyword');
+
+        $articles = Article::with('keywords')
+            ->whereHas('keywords', function($query) use ($keyword){
+                $query->where('name', 'like', "%$keyword%");
+            });
+
+        $host_result =[];
+        $_articles = clone $articles;
+        $hosts = $_articles->select('host')->distinct()->get();
+
+        foreach($hosts as $host) {
+            $_articles = clone $articles;
+            $host_count = $_articles->where('host', $host->host)->count();
+            $array = [];
+            $array['label'] = $host->host;
+            $array['y'] = $host_count;
+
+            $host_result[] = $array;
+        }
+
+        $date_result = [];
+        $_articles = clone $articles;
+        $dates = $_articles->selectRaw("DATE_FORMAT(date,'%Y-%m') as new_date")->distinct()->get();
+
+        foreach($dates as $date) {
+            $_articles = clone $articles;
+            $date_count = $_articles->where('date', 'like', "$date->new_date%")->count();
+            $array = [];
+            $array['label'] = $date->new_date;
+            $array['y'] = $date_count;
+
+            $date_result[] = $array;
+        }
+
+        $result = [];
+        $result['host'] = $host_result;
+        $result['date'] = $date_result;
+
+        return $result;
+    }
+
+    public function classify(Request $request) {
+        $keyword = $request->get('keyword');
+
+        $articles = Article::with('keywords')
+            ->whereHas('keywords', function($query) use ($keyword){
+                $query->where('name', 'like', "%$keyword%");
+            });
+
+        $result=[];
+
+        $articles_result=[];
+        $_articles = clone $articles;
+        $articles_positive_count = $_articles->where('type', Article::POSITIVE_TYPE)->count();
+        $articles_result['positive'] = $articles_positive_count;
+        $_articles = clone $articles;
+        $articles_none_count = $_articles->where('type', Article::NONE_TYPE)->count();
+        $articles_result['none'] = $articles_none_count;
+        $_articles = clone $articles;
+        $articles_negative_count = $_articles->where('type', Article::NEGATIVE_TYPE)->count();
+        $articles_result['negative'] = $articles_negative_count;
+        $result['articles'] = $articles_result;
+
+        $comments_result=[];
+        $comments_result['positive'] = 0;
+        $comments_result['none'] = 0;
+        $comments_result['negative'] = 0;
+
+        $comments = [];
+
+        foreach ($articles->get() as $article) {
+            foreach ($article->comments as $comment){
+                if($comment->type == Article::NEGATIVE_TYPE) $comments_result['negative']++;
+                if($comment->type == Article::NONE_TYPE) $comments_result['none']++;
+                if($comment->type == Article::POSITIVE_TYPE) $comments_result['positive']++;
+            }
+        }
+
+        $result['comments'] = $comments_result;
+
+        return $result;
+    }
+
+    public function info(){
+
     }
 }
