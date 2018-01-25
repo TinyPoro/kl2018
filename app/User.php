@@ -42,4 +42,8 @@ class User extends Authenticatable
     public function getTypeTextAttribute(){
         return array_get($this->type_array, $this->type, 'Người dùng thường');
     }
+
+    public function getTypeValueAttribute($type_text){
+        return array_keys($this->type_array, $type_text);
+    }
 }

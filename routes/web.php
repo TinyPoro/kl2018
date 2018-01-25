@@ -28,20 +28,25 @@ Auth::routes();
 
 //xác thực người dùng
 Route::get('/approve', 'SuperAdminController@approve')->middleware('auth')->name('approve');
-
 Route::post('/accept/{id}', 'SuperAdminController@accept')->name('accept');
 Route::post('/deny/{id}', 'SuperAdminController@deny')->name('deny');
 
 //tìm kiếm từ khóa
 Route::get('/keyword', 'UserController@keyword')->middleware('auth')->name('keyword');
-
 Route::post('/find_keyword', 'UserController@findkeyword')->name('findkeyword');
+
 Route::post('/chart', 'UserController@chart')->name('chart');
 Route::post('/classify', 'UserController@classify')->name('classify');
 
+//xem thông tin bài báo
 Route::get('/article_info', 'UserController@article_info')->middleware('auth')->name('articles_info');
-
 Route::get('/article_info/{id}', 'UserController@article_info')->middleware('auth')->name('article_info');
 
-Route::get('/info', 'UserController@info')->middleware('auth')->name('info');
+//thông tin cá nhân
+Route::get('/info/{id?}', 'UserController@info')->middleware('auth')->name('info');
 Route::post('/update_info', 'UserController@update')->middleware('auth')->name('update_info');
+
+//quản lý người dùng
+Route::get('/manage', 'SuperAdminController@manage')->middleware('auth')->name('manage');
+Route::post('/update/{id}', 'SuperAdminController@update')->name('update');
+Route::post('/delete/{id}', 'SuperAdminController@delete')->name('delete');

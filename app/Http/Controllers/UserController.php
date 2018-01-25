@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Article;
 use App\Comment;
+use App\User;
 use function foo\func;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -118,17 +119,24 @@ class UserController extends Controller
         return $result;
     }
 
-    public function info(){
+    public function info($id = null){
         $user = Auth::user();
 
-        return view('User.info', ['user'=>$user]);
+        if($id) {  //xem người khác
+            $target_user = User::find($id);
+
+            if($user->type<User::SUPER_ADMIN_TYPE && $user->type <= $target_user->type) {
+                return redirect('/');
+            }else return view('User.info', ['user'=>$target_user]);
+        }
+        else return view('User.info', ['user'=>$user]); //tự xem bản thân
     }
 
     public function update(Request $request){
-        $user = Auth::user();
+        $user = User::find($request->get('id'));
 
         $user->email = $request->get('email');
-        $user->password = $request->get('password');
+        $user->password = bcrypt($request->get('password'));
         $user->department = $request->get('department');
         $user->position = $request->get('position');
         $user->address = $request->get('address');

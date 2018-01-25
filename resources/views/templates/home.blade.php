@@ -96,10 +96,11 @@
             <ul class="list-unstyled">
                 <li class="active"><a href="{{url(route('home'))}}"> <i class="fa fa-home"></i>Trang chủ </a></li>
                 <li class="active"><a href="{{url(route('keyword'))}}"> <i class="fa fa-key"></i>Từ khóa </a></li>
-                <li class="active"><a href="{{url(route('info'))}}"> <i class="fa fa-key"></i>Thông tin cá nhân </a></li>
+                <li class="active"><a href="{{url(route('info'))}}"> <i class="fa fa-id-card-o"></i>Thông tin cá nhân </a></li>
 
                 <?php
                  $user = Auth::user();
+                if($user->type == \App\User::SUPER_ADMIN_TYPE || $user->type == \App\User::ADMIN_TYPE) echo "<li class='active'><a href='".route('manage')."'> <i class='fa fa-user-o'></i>Quản lý nhân sự</a></li>";
                  if($user->type == \App\User::SUPER_ADMIN_TYPE) echo "<li class='active'><a href='".route('approve')."'> <i class='fa fa-user-plus'></i>Xác thực người dùng</a></li>";
                 ?>
             </ul>
