@@ -6,6 +6,7 @@ use App\Article;
 use App\Comment;
 use function foo\func;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -118,6 +119,22 @@ class UserController extends Controller
     }
 
     public function info(){
+        $user = Auth::user();
 
+        return view('User.info', ['user'=>$user]);
+    }
+
+    public function update(Request $request){
+        $user = Auth::user();
+
+        $user->email = $request->get('email');
+        $user->password = $request->get('password');
+        $user->department = $request->get('department');
+        $user->position = $request->get('position');
+        $user->address = $request->get('address');
+
+        $saved = $user->save();
+        if($saved) return view('User.info', ['user'=>$user]);
+        else return redirect('/');
     }
 }

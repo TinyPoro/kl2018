@@ -6,11 +6,10 @@
 
 @section('content')
     <div class="container">
-        <h2>Nhập từ khóa vào ô tìm kiếm:</h2>
+        <h2>Từ khóa:</h2>
         <hr>
         <form id="input" onSubmit="return formstop();">
             <div id="keyword" class="form-group">
-                <label for="keyword">Từ khóa:</label>
                 <input type="text" class="form-control" id="keyword" placeholder="Nhập từ khóa bạn quan tâm">
             </div>
             <button id="submit" class="btn btn-primary">Tìm kiếm</button>

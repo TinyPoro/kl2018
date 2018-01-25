@@ -1,45 +1,77 @@
 @extends('templates.home')
 
 @section('title')
-    Tìm kiếm từ khóa
+    Thông tin cá nhân
 @endsection
 
 @section('content')
     <div class="container">
-        <h2>Nhập từ khóa vào ô tìm kiếm:</h2>
+        <h2>{{$user->name}}</h2>
         <hr>
-        <form>
-            <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
+        <form id="info" method="post" action="{{route('update_info')}}">
+            {{ csrf_field() }}
+            <div class="form-group">
+                <label for="email" class="col-sm-2 col-form-label"><strong>Email:</strong></label>
                 <div class="col-sm-10">
-                    <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+                    <input type="email" class="form-control" name="email" id="email" placeholder="Email của bạn" value="{{$user->email}}">
                 </div>
             </div>
-            <div class="form-group row">
-                <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
+            <div class="form-group">
+                <label for="password" class="col-sm-2 col-form-label"><strong>Password:</strong></label>
                 <div class="col-sm-10">
-                    <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+                    <input type="password" class="form-control" name="password" id="password" placeholder="Mật khẩu của bạn" value="{{$user->password}}">
                 </div>
             </div>
 
             <div class="form-row">
-                <div class="col-md-6 mb-3">
-                    <label for="validationDefault03">City</label>
-                    <input type="text" class="form-control" id="validationDefault03" placeholder="City" required>
+                <div style="width: 0.8rem;"></div>
+                <div class="col-md-4 mb-3">
+                    <label for="department"><strong>Phòng ban:</strong></label>
+                    <select name="department" class="form-control" id="department">
+                        <option selected>{{$user->department}}</option>
+                        <option>Kỹ thuật</option>
+                        <option>Kinh doanh</option>
+                        <option>Nhân sự</option>
+                        <option>Hành chính</option>
+                        <option>Kế toán</option>
+                    </select>
                 </div>
-                <div class="col-md-3 mb-3">
-                    <label for="validationDefault04">State</label>
-                    <input type="text" class="form-control" id="validationDefault04" placeholder="State" required>
+                <div class="col-md-4 mb-3">
+                    <label for="position"><strong>Vị trí:</strong></label>
+                    <select name="position" class="form-control" id="position">
+                        <option selected>{{$user->position}}</option>
+                        <option>Trưởng phòng</option>
+                        <option>Phó phòng</option>
+                        <option>Nhân viên</option>
+                        <option>Thực tập</option>
+                    </select>
                 </div>
-                <div class="col-md-3 mb-3">
-                    <label for="validationDefault05">Zip</label>
-                    <input type="text" class="form-control" id="validationDefault05" placeholder="Zip" required>
+            </div>
+
+            <div class="form-group">
+                <label for="address" class="col-sm-2 col-form-label"><strong>Địa chỉ:</strong></label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="address" id="address" value="{{$user->address}}" placeholder="Địa chỉ của bạn">
                 </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 col-form-label"><strong>Loại tài khoản: </strong></label>
+                <span class="col-sm-7"> <input type="text" readonly class="form-control-plaintext" id="address" value="{{$user->getTypeTextAttribute()}}"></span>
+
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 col-form-label"><strong>Ngày dừng hoạt động: </strong></label>
+                @if($user->deleted_at)
+                    <span class="col-sm-7"><input type="text" readonly class="form-control-plaintext" id="address" value="{{$user->deleted_at}}"></span>
+                    @else <span class="col-sm-7"><input type="text" readonly class="form-control-plaintext" id="address" value="Vẫn hoạt động"></span>
+                @endif
             </div>
 
             <div class="form-group row">
                 <div class="col-sm-10">
-                    <button type="submit" class="btn btn-primary">Sign in</button>
+                    <button type="submit" class="btn btn-primary">Cập nhật</button>
                 </div>
             </div>
         </form>
@@ -51,42 +83,6 @@
 
 @section('after-script')
     <script>
-        function formstop() {
-            return false;
-        }
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-        $('#submit').click(function(){
-            var keyword = $(this).siblings('#keyword').find('input').val();
-
-            $.ajax({
-                method: 'POST',
-                url: "find_keyword",
-                data: {keyword:keyword},
-                success: function(result){
-                    // $('form').after("<div id='list_url'></div>");
-                    $('input').prop('disabled', true);
-                    $('#submit').remove();
-
-                    data = "<ul class=\"list-group\">";
-
-                    result.forEach(function(article){
-                        data += "<li class=\"list-group-item\"><a href=\"{{route('articles_info')}}/" + article['id'] + "\">" + article['url'] + "</a></li>";
-                    });
-
-                    data += "</ul>";
-
-                    $('#list_url').html(data);
-
-                    $('#chart').show();
-                }
-            });
-        });
 
 
     </script>

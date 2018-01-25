@@ -44,3 +44,4 @@ Route::get('/article_info', 'UserController@article_info')->middleware('auth')->
 Route::get('/article_info/{id}', 'UserController@article_info')->middleware('auth')->name('article_info');
 
 Route::get('/info', 'UserController@info')->middleware('auth')->name('info');
+Route::post('/update_info', 'UserController@update')->middleware('auth')->name('update_info');

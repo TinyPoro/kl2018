@@ -14,6 +14,13 @@ class User extends Authenticatable
     const ADMIN_TYPE = 1;
     const SUPER_ADMIN_TYPE = 2;
 
+
+    protected $type_array = [
+        -1 => "Chưa xác thực",
+        0 => "Người dùng thường",
+        1 => "Admin",
+        2 => "Super Admin",
+    ];
     /**
      * The attributes that are mass assignable.
      *
@@ -31,4 +38,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function getTypeTextAttribute(){
+        return array_get($this->type_array, $this->type, 'Người dùng thường');
+    }
 }
