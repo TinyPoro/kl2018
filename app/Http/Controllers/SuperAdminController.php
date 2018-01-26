@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DiaryActivity;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -74,5 +75,44 @@ class SuperAdminController extends Controller
         $user->delete();
 
         return $id;
+    }
+
+    public function diary(Request $request){
+        $cur_user = Auth::user();
+
+        $activities_builder = DiaryActivity::with('user')
+        ->whereHas('user', function ($query) use ($cur_user){
+           $query->where('type', '<', $cur_user->type);
+           $query->where('type', '>', -1);
+        });
+
+
+        if($id = $request->get('id')){
+            $activities_builder->where('user_id', $id);
+        }
+
+        if($name = $request->get('name')){
+            $activities_builder->whereHas('user', function ($query) use ($name){
+                $query->where('name', 'like', "%$name%");
+            });
+        }
+
+        if($activity = $request->get('activity')){
+            $diary = new DiaryActivity();
+            $activity_value = $diary->getActivityValueAttribute($activity);
+            $activities_builder->where('activity', $activity_value);
+        }
+//
+//        if($datetime = $request->get('datetime')){
+//            $users_builder->where('name', 'like', "%$address%");
+//        }
+
+        $activities = $activities_builder->get();
+
+        foreach ($activities as $key => $activity){
+            $user = $activity->user();
+        }
+
+        return view('SuperAdmin.diary', ['activities' => $activities]);
     }
 }

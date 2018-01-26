@@ -46,4 +46,8 @@ class User extends Authenticatable
     public function getTypeValueAttribute($type_text){
         return array_keys($this->type_array, $type_text);
     }
+
+    public function activities(){
+        return $this->hasMany('App\DiaryActivity');
+    }
 }

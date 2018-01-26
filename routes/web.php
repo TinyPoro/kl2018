@@ -50,3 +50,6 @@ Route::post('/update_info', 'UserController@update')->middleware('auth')->name('
 Route::get('/manage', 'SuperAdminController@manage')->middleware('auth')->name('manage');
 Route::post('/update/{id}', 'SuperAdminController@update')->name('update');
 Route::post('/delete/{id}', 'SuperAdminController@delete')->name('delete');
+
+//Lịch sử sử dụng
+Route::get('/diary', 'SuperAdminController@diary')->middleware('auth')->name('diary');

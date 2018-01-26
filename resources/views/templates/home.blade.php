@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="{{url('css/font-awesome.min.css')}}">
 
     <link rel="stylesheet" href="{{url('css/style.default.css')}}">
+
+    link rel="stylesheet" href="{{url('css/daterangepicker.css')}}">
 </head>
 <body>
 <div class="page">
@@ -100,7 +102,10 @@
 
                 <?php
                  $user = Auth::user();
-                if($user->type == \App\User::SUPER_ADMIN_TYPE || $user->type == \App\User::ADMIN_TYPE) echo "<li class='active'><a href='".route('manage')."'> <i class='fa fa-user-o'></i>Quản lý nhân sự</a></li>";
+                 if($user->type == \App\User::SUPER_ADMIN_TYPE || $user->type == \App\User::ADMIN_TYPE) {
+                     echo "<li class='active'><a href='".route('manage')."'> <i class='fa fa-user-o'></i>Quản lý nhân sự</a></li>";
+                     echo "<li class='active'><a href='".route('diary')."'> <i class='fa fa-user-o'></i>Quản lý lịch sử sử dụng</a></li>";
+                 }
                  if($user->type == \App\User::SUPER_ADMIN_TYPE) echo "<li class='active'><a href='".route('approve')."'> <i class='fa fa-user-plus'></i>Xác thực người dùng</a></li>";
                 ?>
             </ul>
@@ -139,6 +144,8 @@
 <script src="{{url('js/popper.min.js')}}"> </script>
 <script src="{{url('js/canvasjs.min.js')}}"> </script>
 <script src="{{url('js/bootstrap.min.js')}}"></script>
+<script src="{{url('js/moment.min.js')}}"></script>
+<script src="{{url('js/daterangepicker.js')}}"></script>
 @yield('after-script')
 </body>
 </html>
