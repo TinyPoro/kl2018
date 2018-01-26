@@ -8,9 +8,9 @@
     <div class="container">
         <h2>{{$user->name}}</h2>
         <hr>
-        <input id="info" method="post" action="{{route('update_info')}}">
+        <form id="info" method="post" action="{{route('update_info')}}">
             {{ csrf_field() }}
-            <input type="hidden" name="id" value="{{$usẻ->id}}"></input>
+            <input type="hidden" name="id" value="{{$user->id}}"></input>
             <div class="form-group">
                 <label for="email" class="col-sm-2 col-form-label"><strong>Email:</strong></label>
                 <div class="col-sm-10">
