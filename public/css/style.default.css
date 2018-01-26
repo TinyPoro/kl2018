@@ -452,8 +452,8 @@ nav.side-navbar ul li a {
 }
 
 nav.side-navbar ul li a:hover {
-  background: #796AEE;
-  border-left: 4px solid #3b25e6;
+  background: #2f333e;
+  border-left: 4px solid #2f333e;
   color: #fff;
 }
 
@@ -463,13 +463,13 @@ nav.side-navbar ul li li a {
 }
 
 nav.side-navbar ul li.active > a {
-  background: #796AEE;
+  background: #2f333e;
   color: #fff;
-  border-left: 4px solid #3b25e6;
+  border-left: 4px solid #2f333e;
 }
 
 nav.side-navbar ul li.active > a:hover {
-  background: #796AEE;
+  background: #2f333e;
 }
 
 nav.side-navbar ul li li.active > a {
@@ -2141,9 +2141,9 @@ STYLE SWITCHER FOR DEMO
 }
 
 .btn-primary {
-  color: color-yiq(#796AEE);
-  background-color: #796AEE;
-  border-color: #796AEE;
+  color: color-yiq(#2f333e);
+  background-color: #2f333e;
+  border-color: #2f333e;
 }
 
 .btn-primary:hover {
