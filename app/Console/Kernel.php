@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Console\Commands\CalWTest;
+use App\Console\Commands\ClassifyTest;
 use App\Console\Commands\CrawlTest;
 use App\Console\Commands\TokTest;
 use Illuminate\Console\Scheduling\Schedule;
@@ -17,6 +19,8 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         CrawlTest::class,
         TokTest::class,
+        CalWTest::class,
+        ClassifyTest::class,
     ];
 
     /**
