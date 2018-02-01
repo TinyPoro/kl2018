@@ -5,6 +5,7 @@ namespace App\Console;
 use App\Console\Commands\CalWTest;
 use App\Console\Commands\ClassifyTest;
 use App\Console\Commands\CrawlTest;
+use App\Console\Commands\RunCrawl;
 use App\Console\Commands\TokTest;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -21,6 +22,7 @@ class Kernel extends ConsoleKernel
         TokTest::class,
         CalWTest::class,
         ClassifyTest::class,
+        RunCrawl::class,
     ];
 
     /**
