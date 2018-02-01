@@ -16,7 +16,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         CrawlTest::class,
-        TokTest::class,
+//        TokTest::class,
     ];
 
     /**
