@@ -59,21 +59,22 @@ class CrawlTest extends Command
         preg_match($this->id_pattern, $url, $id_matches);
         $id = $id_matches['0'];
 
-//        try {
-//            $phantomjs_driver_connection = new Driver_Phantomjs_Connection('http://localhost');
-//            $phantomjs_driver_connection->port(4445);
-//            $phantomjs_driver = new Driver_Phantomjs();
-//            $phantomjs_driver->connection($phantomjs_driver_connection);
-//
-//            $page = new Page($phantomjs_driver);
-//
-            $page = new Page();
+            $phantomjs_driver_connection = new Driver_Phantomjs_Connection('http://localhost');
+            $phantomjs_driver_connection->port(4445);
+            $phantomjs_driver = new Driver_Phantomjs();
+            $phantomjs_driver->connection($phantomjs_driver_connection);
 
+            $page = new Page($phantomjs_driver);
+
+//
+//            $page = new Page();
+            echo "a\n";
             try{
                 $page->visit($url);
             }catch (\Exception $e){
                 return;
             }
+            echo "b\n";
 
             //title
             try{
@@ -179,10 +180,6 @@ class CrawlTest extends Command
             //                $page->visit($target_url); echo "visit $target_url\n";
             //            }
             //        }
-//        }catch (\Exception $e){
-//            exec("phantomjs phantom.js 4445 phantomjs-connection.js --ssl-protocol=any --ignore-ssl-errors=true");
-//            echo "a";
-//            \Artisan::call( 'test:crawl', ['--article' => $article_id]);
-//        }
+
     }
 }
