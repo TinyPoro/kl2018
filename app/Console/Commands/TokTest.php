@@ -67,6 +67,7 @@ class TokTest extends Command
 
         $output_file = fopen("$this->output_folder/output.txt", "r") or die("Unable to open output file!");
 
+        //chuyển thành vecto -> cập nhật được tf và df
         $inserted_word=[];
         while(!feof($output_file)) {
             $line = fgets($output_file);

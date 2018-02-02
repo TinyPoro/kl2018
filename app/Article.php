@@ -9,7 +9,7 @@ class Article extends Model
     const NEGATIVE_TYPE = -1;
     const NONE_TYPE = 0;
     const POSITIVE_TYPE = 1;
-    const UNRELATIVE_TYPE = 2;
+    const NO_TYPE = 2;
 
     protected $type_array = [
         -1 => "Tiêu cực",
