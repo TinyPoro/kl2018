@@ -42,7 +42,7 @@ class RunCrawl extends Command
     public function handle()
     {
         $this->crawler = new PhantomCrawler();
-        $articles = Article::where('type', '<>', 0)->where('host', 'dantri.com.vn')->where('id', '>', 901)->get();
+        $articles = Article::where('host', 'dantri.com.vn')->get();
         foreach ($articles as $article){
             echo $article->id."\n";
 //            \Artisan::call( 'test:crawl', ['--article' => $article->id]);
