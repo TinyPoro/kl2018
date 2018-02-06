@@ -5,15 +5,17 @@ namespace App\Console\Commands;
 use App\Article;
 use App\Crawler\PhantomCrawler;
 use Illuminate\Console\Command;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
-class RunCrawl extends Command
+class RunTok extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'run:crawl';
+    protected $signature = 'run:tok';
 
     /**
      * The console command description.
@@ -22,6 +24,7 @@ class RunCrawl extends Command
      */
     protected $description = 'Command description';
 
+    private $crawler;
     /**
      * Create a new command instance.
      *
@@ -32,8 +35,6 @@ class RunCrawl extends Command
         parent::__construct();
     }
 
-    private $crawler;
-
     /**
      * Execute the console command.
      *
@@ -41,12 +42,25 @@ class RunCrawl extends Command
      */
     public function handle()
     {
-//        $this->crawler = new PhantomCrawler();
-        $articles = Article::where('type', '<>', 2)->where('host', 'dantri.com.vn')->where('id', '>', 506)->get();
+
+
+        $process = new Process('phantomjs phantom.js 4445 phantomjs-connection.js --ssl-protocol=any --ignore-ssl-errors=true');
+        echo "x";
+        $process->run();
+        echo "a";
+
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
+
+        echo $process->getOutput();
+
+        dd("a");
+        $this->crawler = new PhantomCrawler();
+        $articles = Article::where('host', 'dantri.com.vn')->get();
         foreach ($articles as $article){
             echo $article->id."\n";
-            \Artisan::call( 'test:tok', ['--article' => $article->id]);
-//            $this->crawler->run($article->id);
+            $this->crawler->run($article->id);
         }
     }
 }
