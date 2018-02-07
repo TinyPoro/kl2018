@@ -6,6 +6,7 @@ use App\Console\Commands\CalWTest;
 use App\Console\Commands\ClassifyTest;
 use App\Console\Commands\CrawlTest;
 use App\Console\Commands\RunCrawl;
+use App\Console\Commands\RunSummary;
 use App\Console\Commands\RunTok;
 use App\Console\Commands\TokTest;
 use Illuminate\Console\Scheduling\Schedule;
@@ -25,6 +26,7 @@ class Kernel extends ConsoleKernel
         ClassifyTest::class,
         RunCrawl::class,
         RunTok::class,
+        RunSummary::class,
     ];
 
     /**

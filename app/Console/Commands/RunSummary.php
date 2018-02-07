@@ -3,19 +3,18 @@
 namespace App\Console\Commands;
 
 use App\Article;
-use App\Crawler\PhantomCrawler;
+use App\Summary\Summarizer;
 use Illuminate\Console\Command;
-use Symfony\Component\Process\Process;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 
-class RunTok extends Command
+class RunSummary extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'run:tok';
+    protected $signature = 'run:summary 
+    {--article=308 : article id to run}';
 
     /**
      * The console command description.
@@ -24,7 +23,6 @@ class RunTok extends Command
      */
     protected $description = 'Command description';
 
-    private $crawler;
     /**
      * Create a new command instance.
      *
@@ -42,10 +40,12 @@ class RunTok extends Command
      */
     public function handle()
     {
-        $articles = Article::where('host', 'dantri.com.vn')->get();
-        foreach ($articles as $article){
-            echo $article->id."\n";
-            \Artisan::call( 'test:tok', ['--article' => $article->id]);
-        }
+        $article_id = $this->option('article');
+        $article = Article::find($article_id);
+
+        $content = $article->content;
+
+        $summarizer = new Summarizer();
+        echo $summarizer->get_summary_n($content, 0.5);
     }
 }

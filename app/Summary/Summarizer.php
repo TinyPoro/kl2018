@@ -147,6 +147,23 @@ class Summarizer
         $this->summary = implode("\n",$summary);
         return $this->summary;
     }
+
+    public function get_summary_n($content, $rate){
+        $sentences_dic = $this->get_sentences_ranks($content);
+        $sorted_dic = $sentences_dic;
+        arsort($sorted_dic);
+        $sorted_dic = array_slice($sorted_dic, 0, count($sorted_dic)*$rate);
+        $sorted_dic_value = array_values($sorted_dic);
+
+        $summary = '';
+        foreach ($sentences_dic as $sentence => $value){
+            if(in_array($value, $sorted_dic_value)){
+                $summary .= $sentence.". ";
+            }
+        }
+        return $summary;
+
+    }
     /**
      * get statistics data
      * @return array
