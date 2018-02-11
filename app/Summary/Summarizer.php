@@ -101,7 +101,7 @@ class Summarizer
                 if( $i == $j)	continue;
                 $score = $score + $values[$i][$j];
             }
-            $sentences_dic[ $this->format_sentence( $sentences[$i] ) ] = $score;
+            $sentences_dic[$sentences[$i]] = $score;
         }
         $this->sentences_dic = $sentences_dic;
         return $sentences_dic;

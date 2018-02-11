@@ -5,6 +5,7 @@ namespace App\Console;
 use App\Console\Commands\CalWTest;
 use App\Console\Commands\ClassifyTest;
 use App\Console\Commands\CrawlTest;
+use App\Console\Commands\RunClassify;
 use App\Console\Commands\RunCrawl;
 use App\Console\Commands\RunSummary;
 use App\Console\Commands\RunTok;
@@ -27,6 +28,7 @@ class Kernel extends ConsoleKernel
         RunCrawl::class,
         RunTok::class,
         RunSummary::class,
+        RunClassify::class,
     ];
 
     /**

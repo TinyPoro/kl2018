@@ -63,6 +63,7 @@ class ClassifyTest extends Command
 
         \DB::table('article_word')->where('article_id', $article_id)->orderBy('id')->chunk(100, function ($rows) use(&$result, $article_id, $POSITIVE_COUNT, $NEGATIVE_COUNT, $NONE_COUNT){
            foreach ($rows as $row){
+               echo "a";
                $word_id = $row->word_id;
                $w = $row->w;
 
@@ -94,13 +95,14 @@ class ClassifyTest extends Command
         }
 
         if($type=="NEGATIVE_RATE"){
+            echo "tieu cuc\n";
             $article->type = -1;
         }
 
         if($type=="NONE_RATE"){
             $article->type = 0;
         }
-
-        $article->save();
+dump($result);
+//        $article->save();
     }
 }

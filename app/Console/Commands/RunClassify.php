@@ -3,19 +3,16 @@
 namespace App\Console\Commands;
 
 use App\Article;
-use App\Crawler\PhantomCrawler;
 use Illuminate\Console\Command;
-use Symfony\Component\Process\Process;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 
-class RunTok extends Command
+class RunClassify extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'run:tok';
+    protected $signature = 'run:classify';
 
     /**
      * The console command description.
@@ -24,7 +21,6 @@ class RunTok extends Command
      */
     protected $description = 'Command description';
 
-    private $crawler;
     /**
      * Create a new command instance.
      *
@@ -42,14 +38,10 @@ class RunTok extends Command
      */
     public function handle()
     {
-        $articles = Article::where('host', 'dantri.com.vn')->get();
+        $articles = Article::where('host', 'dantri.com.vn')->where('type', 2)->get();
         foreach ($articles as $article){
-            $a = \DB::table('article_word')
-                ->where('article_id', $article->id)->get();
-            if(count($a) == 0){
-                echo $article->id."\n";
-                \Artisan::call( 'test:tok', ['--article' => $article->id]);
-            }
+            echo $article->id."\n";
+            \Artisan::call( 'test:classify', ['--article' => $article->id]);
         }
     }
 }
