@@ -38,10 +38,12 @@ class RunClassify extends Command
      */
     public function handle()
     {
-        $articles = Article::where('host', 'dantri.com.vn')->where('type', 2)->get();
-        foreach ($articles as $article){
-            echo $article->id."\n";
-            \Artisan::call( 'test:classify', ['--article' => $article->id]);
-        }
+        Article::where('host', 'dantri.com.vn')->where('type', 2)
+            ->orderBy('id')->chunk(100, function ($articles){
+                foreach ($articles as $article){
+                    echo $article->id."\n";
+                    \Artisan::call( 'test:classify', ['--article' => $article->id]);
+                }
+            });
     }
 }
