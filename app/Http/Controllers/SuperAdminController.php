@@ -12,7 +12,7 @@ class SuperAdminController extends Controller
     public function approve() {
         $users = User::where('type', User::NONE_TYPE)->get();
 
-        return view('superadmin.approve', ['users'=>$users]);
+        return view('SuperAdmin.approve', ['users'=>$users]);
     }
 
     public function accept($id) {
