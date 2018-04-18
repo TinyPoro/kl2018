@@ -37,7 +37,6 @@ class PhantomCrawler
         $id = $id_matches['0'];
 
         if(!$this->page){
-            echo "tạo page mới\n";
             $this->phantomjs_driver_connection = new Driver_Phantomjs_Connection('http://localhost');
             $this->phantomjs_driver_connection->port(4445);
             $this->phantomjs_driver = new Driver_Phantomjs();
@@ -49,7 +48,6 @@ class PhantomCrawler
         try{
             $this->page->visit($url);
         }catch (\Exception $e){
-            dump($this->phantomjs_driver_connection);
             return;
         }
 
@@ -111,7 +109,7 @@ class PhantomCrawler
         $article->content = $content_text;
 
         $article->save();
-
+        \Artisan::call( 'run:summary', ['--article' => $article->id]);
         //comment
         //        $comment_rules = json_decode($rules->comment_rule, TRUE);
         //        foreach ($comment_rules as $comment_rule){

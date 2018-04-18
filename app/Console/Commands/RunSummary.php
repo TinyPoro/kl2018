@@ -46,6 +46,6 @@ class RunSummary extends Command
         $content = $article->content;
 
         $summarizer = new Summarizer();
-        echo $summarizer->get_summary_n($content, 0.5);
+        return $summarizer->get_summary_n($content, 0.5);
     }
 }

@@ -25,6 +25,10 @@
             <span>{{$article->content}}</span>
         </div>
         <div class="form-group">
+            <label><strong>Tóm tắt: </strong></label>
+            <span>{{$article->summary}}</span>
+        </div>
+        <div class="form-group">
             <label><strong>Ngày đăng:  </strong></label>
             <div>{{$article->date}}</div>
         </div>

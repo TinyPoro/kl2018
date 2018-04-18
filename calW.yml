@@ -1,0 +1,11 @@
+apps:
+## DECOMPRESS
+  - script : ./artisan
+    name     : 'calW'
+    interpreter : /usr/bin/php
+    cwd : ./
+    exec_mode: fork
+    args : test:calw
+    autorestart : true
+    restart_delay : 604800000
+    log_date_format : YYYYMMDDHHmm

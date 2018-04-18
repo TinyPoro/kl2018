@@ -38,6 +38,8 @@ class CalWTest extends Command
      */
     public function handle()
     {
+        \Artisan::call( 'run:tok');
+
         $n = \DB::table('article_word')->count();
 
         \DB::update("Update article_word set w = tf*log($n/(SELECT df from words where words.id = article_word.word_id))");
