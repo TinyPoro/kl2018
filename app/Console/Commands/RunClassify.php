@@ -3,17 +3,16 @@
 namespace App\Console\Commands;
 
 use App\Article;
-use App\Crawler\PhantomCrawler;
 use Illuminate\Console\Command;
 
-class RunCrawl extends Command
+class RunClassify extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'run:crawl';
+    protected $signature = 'run:classify';
 
     /**
      * The console command description.
@@ -32,8 +31,6 @@ class RunCrawl extends Command
         parent::__construct();
     }
 
-    private $crawler;
-
     /**
      * Execute the console command.
      *
@@ -41,11 +38,12 @@ class RunCrawl extends Command
      */
     public function handle()
     {
-        $this->crawler = new PhantomCrawler();
-        $articles = Article::where('type', '<>', 0)->where('host', 'dantri.com.vn')->get();
-        foreach ($articles as $article){
-            echo $article->id."\n";
-            $this->crawler->run($article->id);
-        }
+        Article::where('host', 'dantri.com.vn')->where('type', 2)
+            ->orderBy('id')->chunk(100, function ($articles){
+                foreach ($articles as $article){
+                    echo $article->id."\n";
+                    \Artisan::call( 'test:classify', ['--article' => $article->id]);
+                }
+            });
     }
 }

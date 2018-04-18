@@ -3,17 +3,18 @@
 namespace App\Console\Commands;
 
 use App\Article;
-use App\Crawler\PhantomCrawler;
+use App\Summary\Summarizer;
 use Illuminate\Console\Command;
 
-class RunCrawl extends Command
+class RunSummary extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'run:crawl';
+    protected $signature = 'run:summary 
+    {--article=308 : article id to run}';
 
     /**
      * The console command description.
@@ -32,8 +33,6 @@ class RunCrawl extends Command
         parent::__construct();
     }
 
-    private $crawler;
-
     /**
      * Execute the console command.
      *
@@ -41,11 +40,12 @@ class RunCrawl extends Command
      */
     public function handle()
     {
-        $this->crawler = new PhantomCrawler();
-        $articles = Article::where('type', '<>', 0)->where('host', 'dantri.com.vn')->get();
-        foreach ($articles as $article){
-            echo $article->id."\n";
-            $this->crawler->run($article->id);
-        }
+        $article_id = $this->option('article');
+        $article = Article::find($article_id);
+
+        $content = $article->content;
+
+        $summarizer = new Summarizer();
+        echo $summarizer->get_summary_n($content, 0.5);
     }
 }

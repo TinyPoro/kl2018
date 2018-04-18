@@ -20,6 +20,8 @@ class PhantomCrawler
     private $date_pattern = '/\d+\/\d+\/\d+/u';
     private $id_pattern = '/(?<=-)\d+(?=\.htm)/ui';
     protected $page;
+    protected $phantomjs_driver_connection;
+    protected $phantomjs_driver;
 
     public function __construct(){
     }
@@ -36,19 +38,24 @@ class PhantomCrawler
 
         if(!$this->page){
             echo "tạo page mới\n";
-            $phantomjs_driver_connection = new Driver_Phantomjs_Connection('http://localhost');
-            $phantomjs_driver_connection->port(4445);
-            $phantomjs_driver = new Driver_Phantomjs();
-            $phantomjs_driver->connection($phantomjs_driver_connection);
+            $this->phantomjs_driver_connection = new Driver_Phantomjs_Connection('http://localhost');
+            $this->phantomjs_driver_connection->port(4445);
+            $this->phantomjs_driver = new Driver_Phantomjs();
+            $this->phantomjs_driver->connection($this->phantomjs_driver_connection);
 
-            $this->page = new Page($phantomjs_driver);
+            $this->page = new Page($this->phantomjs_driver);
         }
 
         try{
             $this->page->visit($url);
         }catch (\Exception $e){
+            dump($this->phantomjs_driver_connection);
             return;
         }
+
+
+        return;
+
 
         //title
         try{

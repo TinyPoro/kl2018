@@ -102,12 +102,6 @@ class TokTest extends Command
                             $word->save();
                             $inserted_word[] = $w;
 
-                            if($word->df == 2) {
-                                echo "$word->word\n";
-                                echo "$w\n";
-                                dump($inserted_word);
-                            }
-
                             try{
                                 \DB::table('article_word')->insert([
                                     'article_id' => $article_id,

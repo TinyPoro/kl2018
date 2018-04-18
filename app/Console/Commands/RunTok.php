@@ -5,15 +5,17 @@ namespace App\Console\Commands;
 use App\Article;
 use App\Crawler\PhantomCrawler;
 use Illuminate\Console\Command;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
-class RunCrawl extends Command
+class RunTok extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'run:crawl';
+    protected $signature = 'run:tok';
 
     /**
      * The console command description.
@@ -22,6 +24,7 @@ class RunCrawl extends Command
      */
     protected $description = 'Command description';
 
+    private $crawler;
     /**
      * Create a new command instance.
      *
@@ -32,8 +35,6 @@ class RunCrawl extends Command
         parent::__construct();
     }
 
-    private $crawler;
-
     /**
      * Execute the console command.
      *
@@ -41,11 +42,14 @@ class RunCrawl extends Command
      */
     public function handle()
     {
-        $this->crawler = new PhantomCrawler();
-        $articles = Article::where('type', '<>', 0)->where('host', 'dantri.com.vn')->get();
+        $articles = Article::where('host', 'dantri.com.vn')->get();
         foreach ($articles as $article){
-            echo $article->id."\n";
-            $this->crawler->run($article->id);
+            $a = \DB::table('article_word')
+                ->where('article_id', $article->id)->get();
+            if(count($a) == 0){
+                echo $article->id."\n";
+                \Artisan::call( 'test:tok', ['--article' => $article->id]);
+            }
         }
     }
 }
