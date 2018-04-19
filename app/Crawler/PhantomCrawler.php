@@ -24,38 +24,55 @@ class PhantomCrawler
     protected $phantomjs_driver;
 
     public function __construct(){
+        $this->phantomjs_driver_connection = new Driver_Phantomjs_Connection('http://localhost');
+        $this->phantomjs_driver_connection->port(4445);
+        $this->phantomjs_driver = new Driver_Phantomjs();
+        $this->phantomjs_driver->connection($this->phantomjs_driver_connection);
+
+        $this->page = new Page($this->phantomjs_driver);
+//        $this->page = new Page();
     }
 
-    public function run($article_id){
-        $article = Article::find($article_id);
-        if(!$article) $article = new Article();
+    public function crawl($url){
+        try{
+            $this->page->visit($url);
 
-        $host = $article->host;
-        $url = $article->url;
+            $links = $this->page->all('.wrapper a');
 
+            foreach($links as $link){
+                $href = $link->attribute('href');
+
+                if(preg_match("/".str_replace('/', '\/',$url)."/u", $href)) $this->run($href, $url);
+                else {
+                    if(preg_match('/\/[^\/]+\.(html|htm)/u', $href)) {
+                        $href = $url.$href;
+                        $this->run($href, $url);
+                    }
+                }
+            }
+        }catch (\Exception $e){
+            dump($e->getMessage());
+        }
+    }
+
+    public function run($url, $host){
         preg_match($this->id_pattern, $url, $id_matches);
         $id = $id_matches['0'];
 
-        if(!$this->page){
-            echo "tạo page mới\n";
-            $this->phantomjs_driver_connection = new Driver_Phantomjs_Connection('http://localhost');
-            $this->phantomjs_driver_connection->port(4445);
-            $this->phantomjs_driver = new Driver_Phantomjs();
-            $this->phantomjs_driver->connection($this->phantomjs_driver_connection);
-
-            $this->page = new Page($this->phantomjs_driver);
+        $article = Article::where('url', $url)->first();
+        if($article) return;
+        else {
+            $article = new Article();
+            $article->url = $url;
+            $article->host = $host;
+            $article->save();
         }
 
         try{
             $this->page->visit($url);
         }catch (\Exception $e){
-            dump($this->phantomjs_driver_connection);
             return;
         }
-
-
-        return;
-
 
         //title
         try{
@@ -111,7 +128,7 @@ class PhantomCrawler
         $article->content = $content_text;
 
         $article->save();
-
+        dd($url);
         //comment
         //        $comment_rules = json_decode($rules->comment_rule, TRUE);
         //        foreach ($comment_rules as $comment_rule){
