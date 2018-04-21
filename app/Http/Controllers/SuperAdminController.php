@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DiaryActivity;
+use App\Report\ReportManager;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,12 +21,18 @@ class SuperAdminController extends Controller
         $user->type = User::USER_TYPE;
         $user->save();
 
+        $cur_user = Auth::user();
+        ReportManager::saveReport($cur_user->id, DiaryActivity::Approve_Account, "$cur_user->name duyệt người dùng $user->name");
+
         return $id;
     }
 
     public function deny($id) {
         $user = User::find($id);
         $user->delete();
+
+        $cur_user = Auth::user();
+        ReportManager::saveReport($cur_user->id, DiaryActivity::Delete_Account, "$cur_user->name xóa người dùng $user->name");
 
         return $id;
     }
@@ -82,7 +89,7 @@ class SuperAdminController extends Controller
 
         $activities_builder = DiaryActivity::with('user')
         ->whereHas('user', function ($query) use ($cur_user){
-           $query->where('type', '<', $cur_user->type);
+           $query->where('type', '<=', $cur_user->type);
            $query->where('type', '>', -1);
         });
 
@@ -107,8 +114,7 @@ class SuperAdminController extends Controller
 //            $users_builder->where('name', 'like', "%$address%");
 //        }
 
-        $activities = $activities_builder->get();
-
+        $activities = $activities_builder->orderBy('id', 'desc')->get();
         foreach ($activities as $key => $activity){
             $user = $activity->user();
         }

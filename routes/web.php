@@ -53,3 +53,7 @@ Route::post('/delete/{id}', 'SuperAdminController@delete')->name('delete');
 
 //Lịch sử sử dụng
 Route::get('/diary', 'SuperAdminController@diary')->middleware('auth')->name('diary');
+
+//Tóm tắt
+Route::get('/summary', 'UserController@summary_show')->middleware('auth')->name('summary_show');
+Route::post('/summary', 'UserController@summary')->middleware('auth')->name('summary');

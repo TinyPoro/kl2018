@@ -98,6 +98,7 @@
             <ul class="list-unstyled">
                 <li class="active"><a href="{{url(route('home'))}}"> <i class="fa fa-home"></i>Trang chủ </a></li>
                 <li class=""><a href="{{url(route('keyword'))}}"> <i class="fa fa-key"></i>Từ khóa </a></li>
+                <li class=""><a href="{{url(route('summary_show'))}}"> <i class="fa fa-book"></i>Tóm tắt văn bản </a></li>
                 <li class=""><a href="{{url(route('info'))}}"> <i class="fa fa-id-card-o"></i>Thông tin cá nhân </a></li>
 
                 <?php

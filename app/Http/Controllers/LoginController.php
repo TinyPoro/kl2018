@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\DiaryActivity;
+use App\Report\ReportManager;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,6 +20,9 @@ class LoginController extends Controller
             if($user->type == User::NONE_TYPE) {
                 return redirect()->route('_logout');
             }
+
+            ReportManager::saveReport($user->id, DiaryActivity::Login, "$user->name đăng nhập");
+
             return redirect()->route('home');
         }
 

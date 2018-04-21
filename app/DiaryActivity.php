@@ -30,7 +30,6 @@ class DiaryActivity extends Model
         7 => "Tìm kiếm từ khóa",
         8 => "Thay đổi url crawl",
         9 => "Thay đổi cài đặt chu kỳ",
-
     ];
 
     public function getActivityTextAttribute(){

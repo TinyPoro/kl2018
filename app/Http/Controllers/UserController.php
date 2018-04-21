@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Article;
 use App\Comment;
+use App\DiaryActivity;
+use App\Report\ReportManager;
+use App\Summary\Summarizer;
 use App\User;
 use function foo\func;
 use Illuminate\Http\Request;
@@ -16,7 +19,10 @@ class UserController extends Controller
     }
 
     public function findkeyword(Request $request){
+        $user = Auth::user();
+
         $keyword = $request->get('keyword');
+        ReportManager::saveReport($user->id, DiaryActivity::Find_Keyword, "$user->name tìm kiếm từ khóa $keyword");
 
         $articles = Article::with('keywords')
             ->whereHas('keywords', function($query) use ($keyword){
@@ -133,6 +139,8 @@ class UserController extends Controller
     }
 
     public function update(Request $request){
+        $cur_user = Auth::user();
+
         $user = User::find($request->get('id'));
 
         $user->email = $request->get('email');
@@ -142,7 +150,26 @@ class UserController extends Controller
         $user->address = $request->get('address');
 
         $saved = $user->save();
+
+        ReportManager::saveReport($cur_user->id, DiaryActivity::Update_Information, "$cur_user->name cập nhật thông tin của $user->id");
+
+
         if($saved) return view('User.info', ['user'=>$user]);
         else return redirect('/');
+    }
+
+    public function summary_show(){
+        return view('User.summary');
+    }
+
+    public function summary(Request $request){
+        $user = Auth::user();
+        $content = $request->get('content');
+
+        ReportManager::saveReport($user->id, DiaryActivity::Single_Summarizing, "$user->name tóm tắt đơn văn bản");
+
+
+        $summarizer = new Summarizer();
+        return $summarizer->get_summary_n($content, 0.5);
     }
 }
