@@ -110,6 +110,15 @@
                  if($user->type == \App\User::SUPER_ADMIN_TYPE) echo "<li class=''><a href='".route('approve')."'> <i class='fa fa-user-plus'></i>Xác thực người dùng</a></li>";
                 ?>
             </ul>
+
+            <div class="sidebarblock">
+                <h3>Các chủ đề nóng</h3>
+                <div class="divline"></div>
+                <div class="blocktxt">
+                    <ul class="cats">
+                    </ul>
+                </div>
+            </div>
         </nav>
         <div class="content-inner">
             <header class="page-header">
@@ -146,6 +155,40 @@
 <script src="{{url('js/canvasjs.min.js')}}"> </script>
 <script src="{{url('js/bootstrap.min.js')}}"></script>
 <script src="{{url('js/moment.min.js')}}"></script>
+
+<script>
+
+    $(document).ready(function(){
+        getHotTopic();
+
+        var i = 0;
+
+        setInterval(function(){
+            i++;
+            if(i==60){
+                i = 0;
+                getHotTopic();
+            }
+        }, 1000);
+    });
+
+    var getHotTopic = function(){
+        $.ajax({
+            method: 'GET',
+            url: "hot",
+            success: function(result){
+                data = "";
+
+                for(var key in result) {
+                    data += "<li>"+key+"<span class=\"badge pull-right\">"+result[key]+"</span></li>";
+                }
+
+                $('ul.cats').html(data);
+            }
+        });
+    }
+</script>
+
 <script src="{{url('js/daterangepicker.js')}}"></script>
 @yield('after-script')
 </body>

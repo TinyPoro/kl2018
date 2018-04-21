@@ -57,3 +57,5 @@ Route::get('/diary', 'SuperAdminController@diary')->middleware('auth')->name('di
 //Tóm tắt
 Route::get('/summary', 'UserController@summary_show')->middleware('auth')->name('summary_show');
 Route::post('/summary', 'UserController@summary')->middleware('auth')->name('summary');
+
+Route::get('/hot', 'UserController@getHotTopic');

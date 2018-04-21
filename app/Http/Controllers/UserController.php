@@ -8,6 +8,7 @@ use App\DiaryActivity;
 use App\Report\ReportManager;
 use App\Summary\Summarizer;
 use App\User;
+use Carbon\Carbon;
 use function foo\func;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -171,5 +172,31 @@ class UserController extends Controller
 
         $summarizer = new Summarizer();
         return $summarizer->get_summary_n($content, 0.5);
+    }
+
+    public function getHotTopic(){
+        $now = Carbon::now();
+        $start = $now->subDays(7);
+        $articles = Article::where('date', '>=', $start)->get();
+
+        $keyword = [];
+
+        foreach ($articles as $article){
+            foreach($article->keywords as $key){
+                $keyword[] = $key->name;
+            }
+        }
+
+        $keyword = array_count_values($keyword);
+        uasort($keyword, [$this, 'sortKeyword']);
+        $keyword = array_slice($keyword, 0, 5);
+        return $keyword;
+    }
+
+    public function sortKeyword($keyword1, $keyword2){
+        if ($keyword1 == $keyword2) {
+            return 0;
+        }
+        return ($keyword1 > $keyword2) ? -1 : 1;
     }
 }

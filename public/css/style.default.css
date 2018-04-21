@@ -2690,7 +2690,7 @@ STYLE SWITCHER FOR DEMO
 }
 
 /*
- * 3. TYPE  
+ * 3. TYPE
  */
 body {
   font-family: "Poppins", sans-serif;
@@ -3325,4 +3325,73 @@ a > code {
     margin-right: 15px;
     margin-left: 15px;
   }
+}
+
+/*--- Sidebar ---*/
+
+.sidebarblock {
+  background-color: #ffffff;
+  border-radius: 2px;
+  box-shadow: 0 1px 2px #c9cccd;
+  margin-bottom: 20px;
+}
+
+.sidebarblock h3 {
+  color: #363838;
+  font-size: 14px;
+  font-family: 'Open Sans Bold', sans-serif;
+  margin: 0;
+  padding: 20px;
+
+
+}
+
+.sidebarblock .divline {
+  height: 1px;
+  line-height: 1px;
+  border-bottom: solid 1px #f1f1f1;
+}
+
+.sidebarblock .blocktxt {
+  padding:20px;
+}
+
+ul.cats li {
+  list-style: none;
+  display: block;
+  margin:0;
+  padding:0;
+  line-height: 30px;
+}
+
+ul.cats {
+  margin: 0;
+  padding: 0;
+}
+
+ul.cats li a {
+  font-size: 14px;
+  color: #363838;
+  font-family: 'Open Sans Light', sans-serif;
+  line-height: 30px;
+}
+
+ul.cats .badge {
+  background-color: #bdc3c7;
+  font-size: 12px;
+  color: #ffffff;
+  font-family: 'Open Sans Bold', sans-serif;
+  margin-top: 7px;
+}
+
+
+.sidebarblock .blocktxt {
+
+  font-size: 14px;
+  color: #363838;
+  font-family: 'Open Sans Light', sans-serif;
+
+}
+.sidebarblock .blocktxt .smal {
+  font-size: 12px;
 }
