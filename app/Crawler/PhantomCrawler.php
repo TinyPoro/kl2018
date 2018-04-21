@@ -24,13 +24,13 @@ class PhantomCrawler
     protected $phantomjs_driver;
 
     public function __construct(){
-        $this->phantomjs_driver_connection = new Driver_Phantomjs_Connection('http://localhost');
-        $this->phantomjs_driver_connection->port(4445);
-        $this->phantomjs_driver = new Driver_Phantomjs();
-        $this->phantomjs_driver->connection($this->phantomjs_driver_connection);
-
-        $this->page = new Page($this->phantomjs_driver);
-//        $this->page = new Page();
+//        $this->phantomjs_driver_connection = new Driver_Phantomjs_Connection('http://localhost');
+//        $this->phantomjs_driver_connection->port(4445);
+//        $this->phantomjs_driver = new Driver_Phantomjs();
+//        $this->phantomjs_driver->connection($this->phantomjs_driver_connection);
+//
+//        $this->page = new Page($this->phantomjs_driver);
+        $this->page = new Page();
     }
 
     public function crawl($url){
@@ -56,8 +56,8 @@ class PhantomCrawler
     }
 
     public function run($url, $host){
-        preg_match($this->id_pattern, $url, $id_matches);
-        $id = $id_matches['0'];
+        if(preg_match($this->id_pattern, $url, $id_matches)) $id = $id_matches['0'];
+        else return;
 
         $article = Article::where('url', $url)->first();
         if($article) return;
@@ -128,6 +128,8 @@ class PhantomCrawler
         $article->content = $content_text;
 
         $article->save();
+
+        \Artisan::call( 'run:summary', ['--article' => $article->id]);
         dd($url);
         //comment
         //        $comment_rules = json_decode($rules->comment_rule, TRUE);
