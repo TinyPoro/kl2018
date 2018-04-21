@@ -23,8 +23,8 @@ class TokTest extends Command
      */
     protected $description = 'Test tokenizer and convert to VecOfVerb';
 
-    private $input_folder = "vitk/input";
-    private $output_folder = "vitk/output";
+    private $input_folder = "input";
+    private $output_folder = "output";
     /**
      * Create a new command instance.
      *
@@ -44,7 +44,7 @@ class TokTest extends Command
     {
         $article_id = $this->option('article');
 
-        $stop_file = fopen("vitk/stopwords.txt", "r") or die("Unable to open stop file!");
+        $stop_file = fopen("stopwords.txt", "r") or die("Unable to open stop file!");
 
         $stop_word_arr = [];
         while(!feof($stop_file)) {
@@ -63,7 +63,7 @@ class TokTest extends Command
         fwrite($input_file, $content);
         fclose($input_file);
 
-        exec("vitk\\vnTokenizer.bat -i input/input.txt -o output/output.txt");
+        exec("./vnTokenizer.sh -i input/input.txt -o output/output.txt");
 
         $output_file = fopen("$this->output_folder/output.txt", "r") or die("Unable to open output file!");
 

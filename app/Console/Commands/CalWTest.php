@@ -12,7 +12,8 @@ class CalWTest extends Command
      *
      * @var string
      */
-    protected $signature = 'test:calw';
+    protected $signature = 'test:calw
+    {--article=308 : article id to run}';
 
     /**
      * The console command description.
@@ -38,10 +39,15 @@ class CalWTest extends Command
      */
     public function handle()
     {
-        \Artisan::call( 'run:tok');
+        $article_id = $this->option('article');
+        if($article_id == 'all'){
+            \Artisan::call( 'run:tok');
+        }else{
+            //tách từ
+            \Artisan::call( 'test:tok', ['--article' => $article_id]);
+        }
 
         $n = \DB::table('article_word')->count();
-
         \DB::update("Update article_word set w = tf*log($n/(SELECT df from words where words.id = article_word.word_id))");
     }
 }

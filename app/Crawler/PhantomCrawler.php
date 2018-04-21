@@ -129,7 +129,14 @@ class PhantomCrawler
 
         $article->save();
 
+        //tóm tắt
         \Artisan::call( 'run:summary', ['--article' => $article->id]);
+
+        //tính trọng số
+        \Artisan::call( 'test:calW', ['--article' => $article->id]);
+
+        //phân loại
+        \Artisan::call( 'test:classify', ['--article' => $article->id]);
         dd($url);
         //comment
         //        $comment_rules = json_decode($rules->comment_rule, TRUE);
