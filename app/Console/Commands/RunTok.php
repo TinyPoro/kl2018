@@ -42,7 +42,7 @@ class RunTok extends Command
      */
     public function handle()
     {
-        $articles = Article::where('host', 'dantri.com.vn')->get();
+        $articles = Article::where('host', 'http://dantri.com.vn')->get();
         foreach ($articles as $article){
             $a = \DB::table('article_word')
                 ->where('article_id', $article->id)->get();

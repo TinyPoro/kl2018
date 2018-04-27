@@ -38,7 +38,7 @@ class RunClassify extends Command
      */
     public function handle()
     {
-        Article::where('host', 'dantri.com.vn')->where('type', 2)
+        Article::where('host', 'http://dantri.com.vn')->where('type', 2)
             ->orderBy('id')->chunk(100, function ($articles){
                 foreach ($articles as $article){
                     echo $article->id."\n";
