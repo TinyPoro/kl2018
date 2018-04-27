@@ -40,13 +40,30 @@ class PhantomCrawler
             $links = $this->page->all('.wrapper a');
 
             foreach($links as $link){
-                $href = $link->attribute('href');
+                try{
+                    $href = $link->attribute('href');
+                }catch (\Exception $e){
+                    continue;
+                }
 
-                if(preg_match("/".str_replace('/', '\/',$url)."/u", $href)) $this->run($href, $url);
+                if(preg_match("/^".str_replace('/', '\/',$url)."/u", $href)) {
+                    try{
+                        $this->run($href, $url);
+                    }catch (\Exception $e){
+                        continue;
+                    }
+                }
                 else {
+                    if(preg_match('/http/', $href)) continue;
+
                     if(preg_match('/\/[^\/]+\.(html|htm)/u', $href)) {
                         $href = $url.$href;
-                        $this->run($href, $url);
+
+                        try{
+                            $this->run($href, $url);
+                        }catch (\Exception $e){
+                            continue;
+                        }
                     }
                 }
             }
@@ -56,6 +73,7 @@ class PhantomCrawler
     }
 
     public function run($url, $host){
+        dump($url);
         if(preg_match($this->id_pattern, $url, $id_matches)) $id = $id_matches['0'];
         else return;
 
@@ -76,7 +94,9 @@ class PhantomCrawler
 
         //title
         try{
-            $title = $this->page->find('title')->text();
+
+            $title_html = $this->page->find('title');
+            $title = $title_html->text();
         }catch (\Exception $ex){
             $title = null;
         }
@@ -137,7 +157,6 @@ class PhantomCrawler
 
         //phân loại
         \Artisan::call( 'test:classify', ['--article' => $article->id]);
-        dd($url);
         //comment
         //        $comment_rules = json_decode($rules->comment_rule, TRUE);
         //        foreach ($comment_rules as $comment_rule){
