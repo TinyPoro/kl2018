@@ -6,7 +6,11 @@
 
 @section('content')
     <div class="container">
-        <h2>Từ khóa:</h2>
+        <h2 style="width:80% !important;float:left;">Từ khóa:</h2>
+
+        <span>
+            <input type="button" id="print" class="btn btn-success" value="Print this page" onClick="window.print()">
+        </span>
         <hr>
         <form id="input" onSubmit="return formstop();">
             <div id="keyword" class="form-group">
@@ -15,7 +19,7 @@
             <button id="submit" class="btn btn-primary">Tìm kiếm</button>
         </form>
 
-        <div id='list_url' style="width: 500px; max-height: 300px; overflow: auto"></div>
+        <div id='list_url' style="width: 100%; max-height: 300px; overflow: auto"></div>
         <button id="chart" class="btn btn-primary" style="display: none">Next</button>
     </div>
     <style>
@@ -44,7 +48,7 @@
                 data: {keyword:keyword},
                 success: function(result){
                     // $('form').after("<div id='list_url'></div>");
-                    $('input').prop('disabled', true);
+                    $('input#keyword').prop('disabled', true);
                     $('#submit').remove();
 
                     data = "<ul class=\"list-group\">";
@@ -72,10 +76,10 @@
                     url: "chart",
                     data: {keyword:keyword},
                     success: function(result){
-                        $('#list_url').remove();
-                        $('form#input').after("<div id='date_chart' style=\"height: 300px; width: 100%;\"></div>");
-                        $('form#input').after("<div id='host_chart' style=\"height: 300px; width: 100%;\"></div>");
-                        console.log(result);
+                        // $('#list_url').remove();
+                        $('#list_url').after("<div id='date_chart' style=\"height: 300px; width: 100%;\"></div>");
+                        $('#list_url').after("<div id='host_chart' style=\"height: 300px; width: 100%;\"></div>");
+
                         var host_chart = new CanvasJS.Chart("host_chart", {
                             title:{
                                 text: "Thống kê số lượng bài báo theo các trang báo"
