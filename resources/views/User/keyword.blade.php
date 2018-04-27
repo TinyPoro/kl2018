@@ -9,7 +9,7 @@
         <h2 style="width:80% !important;float:left;">Từ khóa:</h2>
 
         <span>
-            <input type="button" id="print" class="btn btn-success" value="Print this page" onClick="window.print()">
+            <button id="print" class="btn btn-success" onClick="printPdf();"><i class="fa fa-print" aria-hidden="true"></i> Print this page</button>
         </span>
         <hr>
         <form id="input" onSubmit="return formstop();">
@@ -29,6 +29,12 @@
 
 @section('after-script')
     <script>
+        function printPdf() {
+            $('#list_url').css({'overflow':'visible','max-height':''});
+            window.print();
+            $('#list_url').css({'overflow':'auto','max-height':'300px'});
+        }
+
         function formstop() {
             return false;
         }
@@ -77,8 +83,8 @@
                     data: {keyword:keyword},
                     success: function(result){
                         // $('#list_url').remove();
-                        $('#list_url').after("<div id='date_chart' style=\"height: 300px; width: 100%;\"></div>");
-                        $('#list_url').after("<div id='host_chart' style=\"height: 300px; width: 100%;\"></div>");
+                        $('form#input').after("<div id='date_chart' style=\"height: 300px; width: 100%;\"></div>");
+                        $('form#input').after("<div id='host_chart' style=\"height: 300px; width: 100%;\"></div>");
 
                         var host_chart = new CanvasJS.Chart("host_chart", {
                             title:{
