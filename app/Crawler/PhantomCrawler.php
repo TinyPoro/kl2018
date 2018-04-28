@@ -10,7 +10,9 @@ namespace App\Crawler;
 
 
 use App\Article;
+use App\Comment;
 use App\HostRule;
+use GuzzleHttp\Client;
 use Openbuildings\Spiderling\Driver_Phantomjs;
 use Openbuildings\Spiderling\Driver_Phantomjs_Connection;
 use Openbuildings\Spiderling\Page;
@@ -206,6 +208,27 @@ class PhantomCrawler
         //                $this->page->visit($target_url); echo "visit $target_url\n";
         //            }
         //        }
+
+        Comment::where('article_id', $article_id)->delete();
+
+        $client = new Client();
+        $response = $client->request(
+            'GET',
+            'http://wcm.dantri.com.vn/comment/list/1-'.$id.'-0-0-5.htm'
+        );
+
+        $html = $response->getBody()->getContents();
+        $datas = json_decode($html);
+
+        foreach ($datas as $data){
+            $comment = new Comment();
+
+            $comment->article_id = $article_id;
+            $comment->user_name	 = $data->SenderFullName;
+            $comment->content = $this->removeTag($data->Content);
+
+            $comment->save();
+        }
     }
 
     public function removeTag($string){

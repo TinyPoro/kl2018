@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Article;
+use App\Crawler\PhantomCrawler;
 use Illuminate\Console\Command;
 
 class RunClassify extends Command
