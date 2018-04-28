@@ -145,7 +145,7 @@ class PhantomCrawler
                 }
             }
         }
-        $article->content = $content_text;
+        $article->content = $this->removeTag($content_text);
 
         $article->save();
 
@@ -206,5 +206,11 @@ class PhantomCrawler
         //                $this->page->visit($target_url); echo "visit $target_url\n";
         //            }
         //        }
+    }
+
+    public function removeTag($string){
+        $string = preg_replace('/<[^>]+>/u', '', $string);
+
+        return $string;
     }
 }
