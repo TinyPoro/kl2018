@@ -80,6 +80,8 @@ class PhantomCrawler
         else return;
 
         $article = Article::where('url', $url)->first();
+        $article_id = $article->id;
+
         if($article) return;
         else {
             $article = new Article();
