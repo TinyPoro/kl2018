@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Article;
+use App\Comment;
 use App\Crawler\PhantomCrawler;
 use Illuminate\Console\Command;
 
@@ -46,5 +47,16 @@ class RunClassify extends Command
                     \Artisan::call( 'test:classify', ['--article' => $article->id]);
                 }
             });
+
+//        Comment::where('type', 2)
+//            ->orderBy('id')->chunk(100, function ($comments){
+//                foreach ($comments as $comment){
+//                    echo $comment->id."\n";
+//
+//                    \Artisan::call( 'test:calW', ['--article' => $comment->id]);
+//
+//                    \Artisan::call( 'comment:classify', ['--comment' => $comment->id]);
+//                }
+//            });
     }
 }

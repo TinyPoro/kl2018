@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Article;
+use App\Comment;
 use App\Word;
 use Illuminate\Console\Command;
 
@@ -127,5 +128,91 @@ class TokTest extends Command
         }
 
         fclose($output_file);
+
+//        $article_id = $this->option('article');
+//
+//        $stop_file = fopen("stopwords.txt", "r") or die("Unable to open stop file!");
+//
+//        $stop_word_arr = [];
+//        while(!feof($stop_file)) {
+//            $line = fgets($stop_file);
+//            $line=str_replace("\n","",$line);
+//            $stop_word_arr[] = $line;       //return word array
+//        }
+//
+//        fclose($stop_file);
+//
+//        $article = Comment::find($article_id);
+//
+//        $content = $article->content;
+//
+//        $input_file = fopen("$this->input_folder/input.txt", "w") or die("Unable to open input file!");
+//        fwrite($input_file, $content);
+//        fclose($input_file);
+//
+//        exec("./vnTokenizer.sh -i input/input.txt -o output/output.txt");
+//
+//        $output_file = fopen("$this->output_folder/output.txt", "r") or die("Unable to open output file!");
+//
+//        //chuyển thành vecto -> cập nhật được tf và df
+//        $inserted_word=[];
+//        while(!feof($output_file)) {
+//            $line = fgets($output_file);
+//            $word_arr = explode(" ", $line); //return word array
+//            foreach($word_arr as $w){
+//                $w = mb_strtolower($w, 'UTF-8');
+//
+//                if($w == "") {
+//                    continue;
+//                }
+//                if(!in_array($w, $stop_word_arr)){
+//                    $word = Word::where('word', $w)->first();
+//
+//                    if(!$word){
+//                        $word = new Word();
+//                        $word->word = $w;
+//                        $word->save();
+//                        $inserted_word[] = $w;
+//
+//                        try{
+//                            \DB::table('comment_word')->insert([
+//                                'comment_id' => $article_id,
+//                                'word_id' => $word->id
+//                            ]);
+//                        }catch (\Exception $e){
+//                            echo $e->getMessage()."\n";
+//                        }
+//
+//                    }else{
+//                        if(!in_array($w, $inserted_word)){
+//                            $word->df++;
+//                            $word->save();
+//                            $inserted_word[] = $w;
+//
+//                            try{
+//                                \DB::table('comment_word')->insert([
+//                                    'comment_id' => $article_id,
+//                                    'word_id' => $word->id
+//                                ]);
+//                            }catch (\Exception $e){
+//                                echo $e->getMessage()."\n";
+//                            }
+//
+//                        }else{
+//                            try{
+//                                \DB::table('comment_word')
+//                                    ->where('comment_id', $article_id)
+//                                    ->where('word_id', $word->id)
+//                                    ->increment('tf');
+//                            }catch (\Exception $e){
+//                                echo $e->getMessage()."\n";
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        fclose($output_file);
     }
 }

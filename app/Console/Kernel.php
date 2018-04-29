@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\CalWTest;
+use App\Console\Commands\ClassifyComment;
 use App\Console\Commands\ClassifyTest;
 use App\Console\Commands\CrawlTest;
 use App\Console\Commands\RunClassify;
@@ -29,6 +30,7 @@ class Kernel extends ConsoleKernel
         RunTok::class,
         RunSummary::class,
         RunClassify::class,
+        ClassifyComment::class,
     ];
 
     /**
