@@ -5,7 +5,7 @@ apps:
     interpreter : /usr/bin/php
     cwd : ./
     exec_mode: fork
-    args : add:lunch
+    args : run:crawl
     autorestart : true
     restart_delay : 900000
     log_date_format : YYYYMMDDHHmm

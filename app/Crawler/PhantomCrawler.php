@@ -75,7 +75,6 @@ class PhantomCrawler
     }
 
     public function run($url, $host){
-        dump($url);
         if(preg_match($this->id_pattern, $url, $id_matches)) $id = $id_matches['0'];
         else return;
 
@@ -89,7 +88,7 @@ class PhantomCrawler
             $article->host = $host;
             $article->save();
         }
-
+        dump($url);
         try{
             $this->page->visit($url);
         }catch (\Exception $e){
