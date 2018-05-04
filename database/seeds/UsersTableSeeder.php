@@ -11,6 +11,17 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Test::class, 500000)->create();
+        $faker = Faker\Factory::create();
+        for($i = 0; $i < 500; $i++){
+            \DB::beginTransaction();
+            for($j = 0; $j<1000; $j++){
+                \DB::table('tests')->insert([
+                    'first_name' => $faker->unique()->name,
+                    'last_name' => $faker->unique()->name,
+                    'year' => $faker->randomDigit,
+                ]);
+            }
+            \DB::commit();
+        }
     }
 }
