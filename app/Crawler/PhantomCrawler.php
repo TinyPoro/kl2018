@@ -21,6 +21,7 @@ class PhantomCrawler
 {
     private $date_pattern = '/\d+\/\d+\/\d+/u';
     private $id_pattern = '/(?<=-)\d+(?=\.htm)/ui';
+    private $ban_pattern = '/print-\d+(?=\.htm)/ui';
     protected $page;
     protected $phantomjs_driver_connection;
     protected $phantomjs_driver;
@@ -75,11 +76,11 @@ class PhantomCrawler
     }
 
     public function run($url, $host){
-        if(preg_match($this->id_pattern, $url, $id_matches)) $id = $id_matches['0'];
+        if(preg_match($this->id_pattern, $url, $id_matches)
+        && !preg_match($this->ban_pattern, $url)) $id = $id_matches['0'];
         else return;
 
         $article = Article::where('url', $url)->first();
-        $article_id = $article->id;
 
         if($article) return;
         else {
@@ -88,6 +89,9 @@ class PhantomCrawler
             $article->host = $host;
             $article->save();
         }
+
+        $article_id = $article->id;
+
         dump($url);
         try{
             $this->page->visit($url);
@@ -152,14 +156,6 @@ class PhantomCrawler
 
         $article->save();
 
-        //tóm tắt
-        \Artisan::call( 'run:summary', ['--article' => $article->id]);
-
-        //tính trọng số
-        \Artisan::call( 'test:calW', ['--article' => $article->id]);
-
-        //phân loại
-        \Artisan::call( 'test:classify', ['--article' => $article->id]);
         //comment
         //        $comment_rules = json_decode($rules->comment_rule, TRUE);
         //        foreach ($comment_rules as $comment_rule){
@@ -210,26 +206,33 @@ class PhantomCrawler
         //            }
         //        }
 
-        Comment::where('article_id', $article_id)->delete();
+        try{
+            Comment::where('article_id', $article_id)->delete();
 
-        $client = new Client();
-        $response = $client->request(
-            'GET',
-            'http://wcm.dantri.com.vn/comment/list/1-'.$id.'-0-0-5.htm'
-        );
+            $client = new Client();
+            $response = $client->request(
+                'GET',
+                'http://wcm.dantri.com.vn/comment/list/1-'.$id.'-0-0-5.htm'
+            );
 
-        $html = $response->getBody()->getContents();
-        $datas = json_decode($html);
+            $html = $response->getBody()->getContents();
+            $datas = json_decode($html);
 
-        foreach ($datas as $data){
-            $comment = new Comment();
+            foreach ($datas as $data){
+                $comment = new Comment();
 
-            $comment->article_id = $article_id;
-            $comment->user_name	 = $data->SenderFullName;
-            $comment->content = $this->removeTag($data->Content);
+                $comment->article_id = $article_id;
+                $comment->user_name	 = $data->SenderFullName;
+                $comment->content = $this->removeTag($data->Content);
 
-            $comment->save();
+                $comment->save();
+            }
+        }catch (\Exception $e){
+            dump($e->getMessage());
+            return;
         }
+
+
     }
 
     public function removeTag($string){
