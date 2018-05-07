@@ -43,6 +43,7 @@ class RunCrawl extends Command
     {
         $this->crawler = new PhantomCrawler();
 
-        $this->crawler->crawl('http://dantri.com.vn');
+//        $this->crawler->crawl('http://dantri.com.vn');
+        $this->crawler->crawl('https://vnexpress.net/');
     }
 }

@@ -40,7 +40,7 @@ class PhantomCrawler
         try{
             $this->page->visit($url);
 
-            $links = $this->page->all('.wrapper a');
+            $links = $this->page->all('a');
 
             foreach($links as $link){
                 try{
@@ -53,6 +53,7 @@ class PhantomCrawler
                     try{
                         $this->run($href, $url);
                     }catch (\Exception $e){
+                        dump($e->getMessage());
                         continue;
                     }
                 }
@@ -65,6 +66,7 @@ class PhantomCrawler
                         try{
                             $this->run($href, $url);
                         }catch (\Exception $e){
+                            dump($e->getMessage());
                             continue;
                         }
                     }
@@ -156,6 +158,15 @@ class PhantomCrawler
 
         $article->save();
 
+        //tóm tắt
+        \Artisan::call( 'run:summary', ['--article' => $article->id]);
+
+        //tính trọng số
+        \Artisan::call( 'test:calW', ['--article' => $article->id]);
+
+        //phân loại
+        \Artisan::call( 'test:classify', ['--article' => $article->id]);
+
         //comment
         //        $comment_rules = json_decode($rules->comment_rule, TRUE);
         //        foreach ($comment_rules as $comment_rule){
@@ -210,29 +221,48 @@ class PhantomCrawler
             Comment::where('article_id', $article_id)->delete();
 
             $client = new Client();
-            $response = $client->request(
-                'GET',
-                'http://wcm.dantri.com.vn/comment/list/1-'.$id.'-0-0-5.htm'
-            );
 
-            $html = $response->getBody()->getContents();
-            $datas = json_decode($html);
+            if($host == 'http://dantri.com.vn'){
+                $response = $client->request(
+                    'GET',
+                    'http://wcm.dantri.com.vn/comment/list/1-'.$id.'-0-0-5.htm'
+                );
 
-            foreach ($datas as $data){
-                $comment = new Comment();
+                $html = $response->getBody()->getContents();
+                $datas = json_decode($html);
 
-                $comment->article_id = $article_id;
-                $comment->user_name	 = $data->SenderFullName;
-                $comment->content = $this->removeTag($data->Content);
+                foreach ($datas as $data){
+                    $comment = new Comment();
 
-                $comment->save();
+                    $comment->article_id = $article_id;
+                    $comment->user_name	 = $data->SenderFullName;
+                    $comment->content = $this->removeTag($data->Content);
+
+                    $comment->save();
+                }
+            }else{
+                $response = $client->request(
+                    'GET',
+                    'https://usi-saas.vnexpress.net/index/get?offset=0&sort=like&objectid='.$id.'&objecttype=1&siteid=1000000'
+                );
+
+                $html = $response->getBody()->getContents();
+                $datas = json_decode($html);
+
+                foreach ($datas->data->items as $data){
+                    $comment = new Comment();
+
+                    $comment->article_id = $article_id;
+                    $comment->user_name	 = $data->full_name;
+                    $comment->content = $this->removeTag($data->content);
+
+                    $comment->save();
+                }
             }
         }catch (\Exception $e){
             dump($e->getMessage());
             return;
         }
-
-
     }
 
     public function removeTag($string){
